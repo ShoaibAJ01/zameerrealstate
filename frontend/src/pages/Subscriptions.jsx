@@ -14,7 +14,7 @@ const Subscriptions = () => {
 
   const fetchPlans = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/subscriptions/plans');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/subscriptions/plans`);
       setPlans(response.data);
     } catch (error) {
       console.error('Error fetching plans:', error);
@@ -30,7 +30,7 @@ const Subscriptions = () => {
     }
 
     try {
-      await axios.post(`http://localhost:5000/api/subscriptions/subscribe/${planId}`, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/subscriptions/subscribe/${planId}`, {
         paymentMethod: 'demo',
         transactionId: 'DEMO-' + Date.now()
       });

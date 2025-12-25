@@ -55,7 +55,7 @@ const AddProperty = () => {
       });
 
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/upload/images', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/upload/images`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
@@ -82,7 +82,7 @@ const AddProperty = () => {
       formData.append('video', file);
 
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/upload/video', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/upload/video`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
@@ -141,7 +141,7 @@ const AddProperty = () => {
       };
 
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/properties', propertyData, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/properties`, propertyData, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

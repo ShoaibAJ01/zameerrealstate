@@ -57,7 +57,7 @@ const ChatWidget = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:5000/api/chat/start',
+        `${import.meta.env.VITE_API_URL}/api/chat/start`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -75,7 +75,7 @@ const ChatWidget = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:5000/api/chat/${chatId}/messages`,
+        `${import.meta.env.VITE_API_URL}/api/chat/${chatId}/messages`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMessages(response.data);
@@ -285,7 +285,7 @@ const ChatWidget = () => {
 
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:5000/api/upload/image',
+        `${import.meta.env.VITE_API_URL}/api/upload/image`,
         formData,
         {
           headers: {
@@ -364,7 +364,7 @@ const ChatWidget = () => {
 
       const token = localStorage.getItem('token');
       const uploadResponse = await axios.post(
-        'http://localhost:5000/api/upload/voice',
+        `${import.meta.env.VITE_API_URL}/api/upload/voice`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

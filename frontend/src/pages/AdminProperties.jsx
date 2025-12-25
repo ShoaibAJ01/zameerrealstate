@@ -18,7 +18,7 @@ const AdminProperties = () => {
 
   const fetchAllProperties = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/properties/admin/all');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/properties/admin/all`);
       setProperties(response.data);
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -29,7 +29,7 @@ const AdminProperties = () => {
 
   const handleStatusChange = async (propertyId, newStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/properties/${propertyId}/status`, {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/api/properties/${propertyId}/status`, {
         status: newStatus
       });
       fetchAllProperties();
@@ -45,7 +45,7 @@ const AdminProperties = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/properties/${propertyId}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/properties/${propertyId}`);
       fetchAllProperties();
     } catch (error) {
       console.error('Error deleting property:', error);

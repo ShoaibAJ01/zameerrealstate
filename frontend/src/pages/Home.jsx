@@ -13,7 +13,7 @@ const Home = () => {
 
   const fetchTestimonials = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/feedback/random?count=6');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/feedback/random?count=6`);
       setTestimonials(response.data);
     } catch (error) {
       console.error('Error fetching testimonials:', error);

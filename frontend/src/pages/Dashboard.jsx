@@ -28,7 +28,7 @@ const Dashboard = () => {
   const checkFeedbackStatus = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/feedback', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/feedback`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const userFeedback = response.data.find(f => f.user._id === user?._id);
@@ -40,7 +40,7 @@ const Dashboard = () => {
 
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/users');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`);
       setAllUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -49,7 +49,7 @@ const Dashboard = () => {
 
   const fetchUserProperties = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/properties/user/my-properties');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/properties/user/my-properties`);
       setProperties(response.data);
       
       const totalViews = response.data.reduce((sum, prop) => sum + prop.views, 0);
@@ -70,7 +70,7 @@ const Dashboard = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/properties/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/properties/${id}`);
       fetchUserProperties();
     } catch (error) {
       console.error('Error deleting property:', error);
@@ -83,7 +83,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:5000/api/feedback',
+        `${import.meta.env.VITE_API_URL}/api/feedback`,
         feedback,
         { headers: { Authorization: `Bearer ${token}` } }
       );

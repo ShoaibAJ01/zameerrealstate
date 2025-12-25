@@ -33,7 +33,7 @@ const Properties = () => {
         }
       });
 
-      const response = await axios.get(`http://localhost:5000/api/properties?${queryParams}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/properties?${queryParams}`);
       setProperties(response.data.properties);
     } catch (error) {
       console.error('Error fetching properties:', error);

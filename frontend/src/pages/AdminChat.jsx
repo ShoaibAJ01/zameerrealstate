@@ -63,7 +63,7 @@ const AdminChat = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        'http://localhost:5000/api/users/all',
+        `${import.meta.env.VITE_API_URL}/api/users/all`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setAdmins(response.data.filter(u => u.role === 'admin'));
@@ -76,7 +76,7 @@ const AdminChat = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        'http://localhost:5000/api/chat/admin/all-chats',
+        `${import.meta.env.VITE_API_URL}/api/chat/admin/all-chats`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setChats(response.data);
@@ -89,7 +89,7 @@ const AdminChat = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:5000/api/chat/${chatId}/messages`,
+        `${import.meta.env.VITE_API_URL}/api/chat/${chatId}/messages`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMessages(response.data);
@@ -291,7 +291,7 @@ const AdminChat = () => {
 
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:5000/api/upload/image',
+        `${import.meta.env.VITE_API_URL}/api/upload/image`,
         formData,
         {
           headers: {
@@ -321,7 +321,7 @@ const AdminChat = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.patch(
-        `http://localhost:5000/api/chat/${selectedChat._id}/assign`,
+        `${import.meta.env.VITE_API_URL}/api/chat/${selectedChat._id}/assign`,
         { assignedTo: assignedToId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -380,7 +380,7 @@ const AdminChat = () => {
 
       const token = localStorage.getItem('token');
       const uploadResponse = await axios.post(
-        'http://localhost:5000/api/upload/voice',
+        `${import.meta.env.VITE_API_URL}/api/upload/voice`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

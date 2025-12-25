@@ -18,7 +18,7 @@ const PropertyDetail = () => {
 
   const fetchAdminInfo = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/users/admin-info');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/admin-info`);
       setAdminInfo(response.data);
     } catch (error) {
       console.error('Error fetching admin info:', error);
@@ -27,7 +27,7 @@ const PropertyDetail = () => {
 
   const fetchProperty = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/properties/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/properties/${id}`);
       setProperty(response.data);
     } catch (error) {
       console.error('Error fetching property:', error);
