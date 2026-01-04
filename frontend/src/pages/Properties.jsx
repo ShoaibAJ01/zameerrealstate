@@ -4,6 +4,17 @@ import PropertyCard from '../components/PropertyCard';
 import PropertyMap from '../components/PropertyMap';
 import { Search, SlidersHorizontal, Grid3x3, MapIcon } from 'lucide-react';
 
+// Pakistan Provinces and Cities Data
+const pakistanData = {
+  Punjab: ['Lahore', 'Faisalabad', 'Rawalpindi', 'Multan', 'Gujranwala', 'Sialkot', 'Bahawalpur', 'Sargodha', 'Sheikhupura', 'Jhang', 'Rahim Yar Khan', 'Gujrat', 'Kasur', 'Sahiwal', 'Okara', 'Wah Cantonment', 'Dera Ghazi Khan', 'Mirpur Khas', 'Nawabshah', 'Kamoke', 'Mandi Burewala', 'Jhelum', 'Sadiqabad', 'Khanewal', 'Hafizabad', 'Khanpur', 'Chiniot', 'Muzaffargarh', 'Attock', 'Vehari', 'Chakwal', 'Mianwali'],
+  Sindh: ['Karachi', 'Hyderabad', 'Sukkur', 'Larkana', 'Nawabshah', 'Mirpur Khas', 'Jacobabad', 'Shikarpur', 'Khairpur', 'Dadu', 'Thatta', 'Badin', 'Tando Adam', 'Tando Allahyar', 'Umerkot', 'Sanghar', 'Naushahro Feroze', 'Ghotki', 'Kashmore', 'Matiari'],
+  KPK: ['Peshawar', 'Mardan', 'Abbottabad', 'Mingora', 'Kohat', 'Dera Ismail Khan', 'Swabi', 'Charsadda', 'Nowshera', 'Mansehra', 'Bannu', 'Swat', 'Malakand', 'Haripur', 'Chitral', 'Karak', 'Hangu', 'Dir', 'Buner', 'Lakki Marwat'],
+  Balochistan: ['Quetta', 'Gwadar', 'Turbat', 'Khuzdar', 'Hub', 'Chaman', 'Zhob', 'Sibi', 'Loralai', 'Dera Murad Jamali', 'Mastung', 'Kalat', 'Pishin', 'Dera Bugti', 'Awaran', 'Lasbela', 'Jhal Magsi', 'Kech'],
+  'Gilgit-Baltistan': ['Gilgit', 'Skardu', 'Hunza', 'Ghizer', 'Diamir', 'Astore', 'Ghanche', 'Shigar', 'Kharmang', 'Nagar'],
+  'Azad Kashmir': ['Muzaffarabad', 'Mirpur', 'Rawalakot', 'Kotli', 'Bhimber', 'Bagh', 'Palandri', 'Sudhnoti', 'Neelum', 'Hattian'],
+  Islamabad: ['Islamabad']
+};
+
 const Properties = () => {
   const [properties, setProperties] = useState([]);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'map'
@@ -14,10 +25,12 @@ const Properties = () => {
     listingType: '',
     minPrice: '',
     maxPrice: '',
+    state: '',
     city: '',
     bedrooms: ''
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [availableCities, setAvailableCities] = useState([]);
 
   useEffect(() => {
     fetchProperties();
@@ -43,10 +56,22 @@ const Properties = () => {
   };
 
   const handleFilterChange = (e) => {
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    
+    // If state/province changes, update available cities
+    if (name === 'state') {
+      setFilters({
+        ...filters,
+        [name]: value,
+        city: '' // Reset city when state changes
+      });
+      setAvailableCities(pakistanData[value] || []);
+    } else {
+      setFilters({
+        ...filters,
+        [name]: value
+      });
+    }
   };
 
   const handleSearch = (e) => {
@@ -61,9 +86,11 @@ const Properties = () => {
       listingType: '',
       minPrice: '',
       maxPrice: '',
+      state: '',
       city: '',
       bedrooms: ''
     });
+    setAvailableCities([]);
     setTimeout(() => fetchProperties(), 100);
   };
 
@@ -149,14 +176,38 @@ const Properties = () => {
                   <option value="rent">For Rent</option>
                 </select>
 
-                <input
-                  type="text"
+                <select
+                  name="state"
+                  value={filters.state}
+                  onChange={handleFilterChange}
+                  className="px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                >
+                  <option value="">Province/State</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Sindh">Sindh</option>
+                  <option value="KPK">Khyber Pakhtunkhwa</option>
+                  <option value="Balochistan">Balochistan</option>
+                  <option value="Gilgit-Baltistan">Gilgit-Baltistan</option>
+                  <option value="Azad Kashmir">Azad Kashmir</option>
+                  <option value="Islamabad">Islamabad</option>
+                </select>
+
+                <select
                   name="city"
                   value={filters.city}
                   onChange={handleFilterChange}
-                  placeholder="City"
-                  className="px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
-                />
+                  disabled={!filters.state}
+                  className="px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base disabled:bg-gray-100 disabled:cursor-not-allowed"
+                >
+                  <option value="">
+                    {filters.state ? 'Select City' : 'Select Province First'}
+                  </option>
+                  {availableCities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
 
                 <input
                   type="number"

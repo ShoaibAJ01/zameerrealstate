@@ -12,6 +12,7 @@ router.get('/', async (req, res) => {
       listingType,
       minPrice,
       maxPrice,
+      state,
       city,
       bedrooms,
       bathrooms,
@@ -26,6 +27,7 @@ router.get('/', async (req, res) => {
 
     if (propertyType) query.propertyType = propertyType;
     if (listingType) query.listingType = listingType;
+    if (state) query['address.state'] = new RegExp(state, 'i');
     if (city) query['address.city'] = new RegExp(city, 'i');
     if (bedrooms) query.bedrooms = { $gte: parseInt(bedrooms) };
     if (bathrooms) query.bathrooms = { $gte: parseInt(bathrooms) };
@@ -46,7 +48,8 @@ router.get('/', async (req, res) => {
       query.$or = [
         { title: new RegExp(search, 'i') },
         { description: new RegExp(search, 'i') },
-        { 'address.city': new RegExp(search, 'i') }
+        { 'address.city': new RegExp(search, 'i') },
+        { 'address.state': new RegExp(search, 'i') }
       ];
     }
 

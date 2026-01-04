@@ -4,6 +4,17 @@ import axios from 'axios';
 import { AlertCircle, MapPin as MapPinIcon, Upload, X, Loader } from 'lucide-react';
 import MapPicker from '../components/MapPicker';
 
+// Pakistan Provinces and Cities Data
+const pakistanData = {
+  Punjab: ['Lahore', 'Faisalabad', 'Rawalpindi', 'Multan', 'Gujranwala', 'Sialkot', 'Bahawalpur', 'Sargodha', 'Sheikhupura', 'Jhang', 'Rahim Yar Khan', 'Gujrat', 'Kasur', 'Sahiwal', 'Okara', 'Wah Cantonment', 'Dera Ghazi Khan', 'Mirpur Khas', 'Nawabshah', 'Kamoke', 'Mandi Burewala', 'Jhelum', 'Sadiqabad', 'Khanewal', 'Hafizabad', 'Khanpur', 'Chiniot', 'Muzaffargarh', 'Attock', 'Vehari', 'Chakwal', 'Mianwali'],
+  Sindh: ['Karachi', 'Hyderabad', 'Sukkur', 'Larkana', 'Nawabshah', 'Mirpur Khas', 'Jacobabad', 'Shikarpur', 'Khairpur', 'Dadu', 'Thatta', 'Badin', 'Tando Adam', 'Tando Allahyar', 'Umerkot', 'Sanghar', 'Naushahro Feroze', 'Ghotki', 'Kashmore', 'Matiari'],
+  KPK: ['Peshawar', 'Mardan', 'Abbottabad', 'Mingora', 'Kohat', 'Dera Ismail Khan', 'Swabi', 'Charsadda', 'Nowshera', 'Mansehra', 'Bannu', 'Swat', 'Malakand', 'Haripur', 'Chitral', 'Karak', 'Hangu', 'Dir', 'Buner', 'Lakki Marwat'],
+  Balochistan: ['Quetta', 'Gwadar', 'Turbat', 'Khuzdar', 'Hub', 'Chaman', 'Zhob', 'Sibi', 'Loralai', 'Dera Murad Jamali', 'Mastung', 'Kalat', 'Pishin', 'Dera Bugti', 'Awaran', 'Lasbela', 'Jhal Magsi', 'Kech'],
+  'Gilgit-Baltistan': ['Gilgit', 'Skardu', 'Hunza', 'Ghizer', 'Diamir', 'Astore', 'Ghanche', 'Shigar', 'Kharmang', 'Nagar'],
+  'Azad Kashmir': ['Muzaffarabad', 'Mirpur', 'Rawalakot', 'Kotli', 'Bhimber', 'Bagh', 'Palandri', 'Sudhnoti', 'Neelum', 'Hattian'],
+  Islamabad: ['Islamabad']
+};
+
 const AddProperty = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -21,7 +32,7 @@ const AddProperty = () => {
     street: '',
     city: '',
     state: '',
-    country: '',
+    country: 'Pakistan',
     zipCode: '',
     features: '',
     amenities: ''
@@ -33,12 +44,25 @@ const AddProperty = () => {
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [availableCities, setAvailableCities] = useState([]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    
+    // If state/province changes, update available cities
+    if (name === 'state') {
+      setFormData({
+        ...formData,
+        [name]: value,
+        city: '' // Reset city when state changes
+      });
+      setAvailableCities(pakistanData[value] || []);
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
   const handleImageUpload = async (e) => {
@@ -450,35 +474,6 @@ const AddProperty = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                City *
-              </label>
-              <input
-                type="text"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                placeholder="New York"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                State
-              </label>
-              <input
-                type="text"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                placeholder="NY"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Country *
               </label>
               <input
@@ -487,9 +482,55 @@ const AddProperty = () => {
                 value={formData.country}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                placeholder="USA"
+                readOnly
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500"
+                placeholder="Pakistan"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Province/State *
+              </label>
+              <select
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select Province</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Sindh">Sindh</option>
+                <option value="KPK">Khyber Pakhtunkhwa (KPK)</option>
+                <option value="Balochistan">Balochistan</option>
+                <option value="Gilgit-Baltistan">Gilgit-Baltistan</option>
+                <option value="Azad Kashmir">Azad Jammu & Kashmir</option>
+                <option value="Islamabad">Islamabad Capital Territory</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                City *
+              </label>
+              <select
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                required
+                disabled={!formData.state}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              >
+                <option value="">
+                  {formData.state ? 'Select City' : 'First select a province'}
+                </option>
+                {availableCities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
