@@ -25,7 +25,7 @@ const Navbar = () => {
               </div>
               <div>
                 <span className="text-2xl font-black bg-gradient-to-r from-slate-900 to-slate-700 text-transparent bg-clip-text">
-                  RealEstate
+                   Zameer RealEstate
                 </span>
                 <div className="flex items-center gap-1 -mt-1">
                   <Sparkles className="h-2 w-2 text-yellow-500" />
@@ -104,7 +104,7 @@ const Navbar = () => {
                     >
                       <span className="flex items-center gap-2">
                         <Settings className="h-4 w-4" />
-                        Properties
+                         Manage Properties
                       </span>
                       {isActive('/admin/properties') && (
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
