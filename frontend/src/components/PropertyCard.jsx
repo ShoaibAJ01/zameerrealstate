@@ -14,6 +14,14 @@ const PropertyCard = ({ property }) => {
           alt={property.title}
           className="w-full h-40 sm:h-48 object-cover"
         />
+        {/* Status Badge - Sold/Rented */}
+        {(property.status === 'sold' || property.status === 'rented') && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <span className="bg-red-600 text-white px-4 py-2 rounded-lg text-lg font-bold uppercase">
+              {property.status === 'sold' ? 'SOLD' : 'RENTED'}
+            </span>
+          </div>
+        )}
         <div className="absolute top-2 left-2">
           <span className="bg-blue-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
             {property.listingType === 'sale' ? 'For Sale' : 'For Rent'}
